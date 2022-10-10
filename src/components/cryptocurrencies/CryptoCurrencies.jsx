@@ -14,13 +14,21 @@ function CryptoCurrencies({ simplified }) {
 
   const { data: cryptosList, isFetching } = useGetCryptosQuery(count);
 
-  const [cryptos, setCryptos] = useState(cryptosList?.data.coins);
+  // states
+  const [cryptos, setCryptos] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     if (!isFetching) {
       setCryptos(cryptosList?.data.coins);
     }
-  }, [cryptosList?.data.coins, isFetching]);
+
+    const filterData = cryptosList?.data?.coins.filter((coin) =>
+      coin.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    setCryptos(filterData);
+  }, [cryptosList?.data.coins, isFetching, searchTerm]);
 
   console.log(cryptos);
 
@@ -28,10 +36,18 @@ function CryptoCurrencies({ simplified }) {
 
   return (
     <div>
+      {!simplified && (
+        <section className="search-crypto">
+          <Input
+            placeholder=" Search for cryptocurrencies "
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </section>
+      )}
       <Row gutter={[32, 32]} className="crypto-card-container">
         {cryptos?.map((crypt) => (
           <Col xs={24} sm={12} lg={6} className="crypto-card" key={crypt.uuid}>
-            <Link to={`/crypto${crypt.uuid}`}>
+            <Link to={`/crypto/${crypt.uuid}`}>
               <Card
                 title={`${crypt.rank}. ${crypt.name}`}
                 extra={

@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 // Comps
 import { useGetCryptosQuery } from "../../services/cryptoApi";
 import { CryptoCurrencies, News } from "../compExport";
+import Loader from "../Loader";
 
 const { Title } = Typography;
 
@@ -17,7 +18,7 @@ function Homepage() {
   // const globalStats = data?.data.stats;
   // console.log(globalStats);
 
-  if (isFecting) return "loading...";
+  if (isFecting) return <Loader />;
 
   return (
     <div>

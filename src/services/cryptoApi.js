@@ -18,18 +18,35 @@ export const cryptoApi = createApi({
   // name of your reducer
   reducerPath: "cryptoApi",
   // api url
-  baseQuery: fetchBaseQuery({ baseUrl }),
+  baseQuery: fetchBaseQuery({ baseUrl: baseUrl }),
 
   // endpoints, to get specific request from api
   endpoints: (builder) => ({
     // name your endpoint request
+
+    // get cryptos
     getCryptos: builder.query({
       query: (count) => createRequest(`/coins?limit=${count}`),
+    }),
+
+    // Get cryptodetails endpoint for a single coin base on it's id
+    getCryptosDetails: builder.query({
+      query: (coinId) => createRequest(`/coin/${coinId}`),
+    }),
+
+    // Get cryptohistory endpoint for a single coin base on it's id to display it's chart usinh chartjs
+    getCryptosHistory: builder.query({
+      query: ({ coinId, timePeriod }) =>
+        createRequest(`/coin/${coinId}/history?timeperiod=${timePeriod}`),
     }),
   }),
 });
 
-export const { useGetCryptosQuery } = cryptoApi;
+export const {
+  useGetCryptosQuery,
+  useGetCryptosDetailsQuery,
+  useGetCryptosHistoryQuery,
+} = cryptoApi;
 
 // const options = {
 //     method: 'GET',
